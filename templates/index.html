@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        $(function(){
+            $("#answer_input").focus();
+        })
+    </script> 
+
+    <script>
+        $(function(){
+            $("#submitid").on('click',function(event){
+                event.preventDefault();
+            })
+        })
+    </script>
+    
+    <script>
+    $(function(){ 
+        $("#submitid").on('click', function(event){
+                loadnewquestion()
+        })
+
+    function loadnewquestion(){
+        const answer = $("#answer_input").val();
+        const question = $(".question").data("match_quest");
+        const no = $(".score").data("ques_no");
+        $.ajax({
+            url:'/submit-answer',
+            type: 'POST',
+            data:{
+                a:answer,
+                q:question,
+                n:no,
+            },
+            dataType: 'json', 
+
+            success: function(returnVal){
+                console.log("the return value from server is" , returnVal);
+
+                $("#new_question_id").text(returnVal.res);
+                
+                setTimeout(function(){
+                    $("#new_question_id").text("");
+                },2000)
+                $(".question").text(returnVal.next_question);
+                $(".score").text("Score "+ returnVal.question_no);
+                $(".score").data("ques_no" , returnVal.question_no);
+                $(".question").data("match_quest" , returnVal.next_question);
+                $("#answer_input").val("");
+            }
+        });
+    }
+    });
+    </script>
+
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="question" data-match_quest="{{ques}}" > {{ ques }} </div>
+    <form action="/" method="POST">
+        <input type="text" id="answer_input" name="content" autocomplete="off">
+        <input type="submit" value="Enter" id="submitid">
+    </form>
+    <div class="score" data-ques_no="1"> Score 1 </div>
+
+</body>
+</html>
