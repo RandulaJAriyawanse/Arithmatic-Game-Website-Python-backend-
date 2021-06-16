@@ -1,4 +1,4 @@
 # Arithmatic-Game-Website-Python-backend-
-Python backend, JS, HTML, CSS - https://randula-arithmatic-app.herokuapp.com/
+Python backend, JS, HTML, CSS
 
 Live Website - "https://randula-arithmatic-app.herokuapp.com/"
